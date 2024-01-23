@@ -6,7 +6,7 @@ import React from 'react'
 const Header = () => {
   return (
     <header>
-        <Navbar bg="dark" variant="dark" expand="md" collaspeOnSelect>
+        <Navbar bg='dark' variant='dark' expand='md' collaspeonselect='true'>
          <Container>
 
           <LinkContainer to='/'>
