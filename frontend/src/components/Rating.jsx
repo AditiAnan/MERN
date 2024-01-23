@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaStarHalfAlt } from 'react-icons/fa'
+import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa'
 
 const Rating = ({value, text}) => {
   return (
