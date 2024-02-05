@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import FormContainer from '../components/FormContainer';
@@ -13,13 +13,15 @@ const LoginScreen = () => {
     e.preventDefault();
     console.log('submit')
   }
+ 
+
 
   return (
     <FormContainer>
       <h1>Sign In</h1>
 
       <Form onSubmit={submitHandler}>
-        <Form.Group className='my-3' controlId='email'>
+        <Form.Group  controlId='email' className='my-3'>
           <Form.Label>Email Address</Form.Label>
           <Form.Control
             type='email'
@@ -29,7 +31,7 @@ const LoginScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group className='my-3' controlId='password'>
+        <Form.Group controlId='password' className='my-3'>
           <Form.Label>Password</Form.Label>
           <Form.Control
             type='password'
@@ -39,18 +41,18 @@ const LoginScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Button type='submit' variant='primary' className='mt-2'>
+        <Button type='submit' variant='primary' className="mt-3">
           Sign In
         </Button>
       </Form>
 
       <Row className='py-3'>
         <Col>
-          New Customer? <Link to= '/register'>Register</Link>
+          New Customer? <Link to='/register'>Register</Link>
         </Col>
       </Row>
     </FormContainer>
-  )
-}
+  );
+};
 
 export default LoginScreen;
