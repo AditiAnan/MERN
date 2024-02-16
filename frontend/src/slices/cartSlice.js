@@ -37,9 +37,10 @@ const cartSlice = createSlice({
       state.paymentMethod = action.payload;
       localStorage.setItem('cart', JSON.stringify(state));
     },
-
-    
-    resetCart: (state) => (state = initialState),
+    clearCartItems: (state, action) => {
+      state.cartItems = [];
+      return updateCart(state);
+    },
   },
 });
 
@@ -49,7 +50,7 @@ export const {
   saveShippingAddress,
   savePaymentMethod,
   clearCartItems,
-  resetCart,
+  
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
