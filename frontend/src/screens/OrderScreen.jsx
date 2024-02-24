@@ -21,7 +21,9 @@ const OrderScreen = () => {
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
-  
+  const [deliverOrder, { isLoading: loadingDeliver }] =
+    useDeliverOrderMutation();
+
   const { userInfo } = useSelector((state) => state.auth);
 
   const {
@@ -88,6 +90,15 @@ const OrderScreen = () => {
   }
 
 
+  const deliverHandler = async () => {
+    try{
+      await deliverOrder(orderId);
+    refetch();
+    toast.success('Order Delivered');
+  } catch(err) {
+    toast.error(err?.data?.message || err.message );
+  }
+  }
 
 return isLoading ? <Loader /> : error ? <Message variant="danger" />
 :(
@@ -213,7 +224,7 @@ return isLoading ? <Loader /> : error ? <Message variant="danger" />
                 </ListGroup.Item>
               )}
 
-              {/* {loadingDeliver && <Loader />}
+             {loadingDeliver && <Loader />}
 
               {userInfo &&
                 userInfo.isAdmin &&
@@ -225,9 +236,10 @@ return isLoading ? <Loader /> : error ? <Message variant="danger" />
                       className='btn btn-block'
                       onClick={deliverHandler}
                     >
-                      Mark As Delivered */}
-                    {/* </Button> */}
-                  {/* </ListGroup.Item> */}
+                      Mark As Delivered
+                    </Button> 
+                 </ListGroup.Item> 
+                )}
             </ListGroup>
           </Card>
         </Col>
