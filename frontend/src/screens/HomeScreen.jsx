@@ -8,7 +8,7 @@ import { useGetProductsQuery } from '../slices/productsApiSlice';
 import Paginate from '../components/Paginate';
 import { Link } from 'react-router-dom';
 import ProductCarousel from '../components/ProductCarousel';
-
+import Meta from '../components/Meta';
 
 const HomeScreen = () => {
   const { pageNumber, keyword } = useParams();
@@ -28,6 +28,7 @@ const HomeScreen = () => {
         <Loader />
        ) : error ? (<Message variant='danger'>  {error?.data?.message || error.error} </Message>) :
         (<> 
+        <Meta />
          <h1>Latest Products</h1> 
        <Row>
         {data.products.map((product) => (
