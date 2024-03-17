@@ -8,6 +8,7 @@ import {
 } from '../../slices/productsApiSlice';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
+import Paginate from '../../components/Paginate';
 
 
 
@@ -106,6 +107,7 @@ const createProductHandler = async () => {
               ))}
             </tbody>
             </Table>
+            <Paginate pages ={ data.pages} page={data.page} isAdmin={true}/>
         </>
       )}
     </>
