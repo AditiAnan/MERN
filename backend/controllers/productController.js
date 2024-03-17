@@ -121,6 +121,19 @@ const createProduct = asyncHandler(async (req, res) => {
       throw new Error('Product not found');
     }
   });
+  const getTopProducts = asyncHandler(async (req, res) => {
+    const products = await Product.find({}).sort({ rating: -1 }).limit(3);
   
-export { getProducts, getProductById,createProduct, updateProduct, deleteProduct, createProductReview,
+    res.json(products);
+  });
+  
+  
+export { 
+  getProducts, 
+  getProductById,
+  createProduct, 
+  updateProduct,
+  deleteProduct, 
+  createProductReview, 
+  getTopProducts,
 }; 
