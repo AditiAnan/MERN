@@ -15,16 +15,22 @@ import {
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
-  const { data: order, refetch, isLoading, error } = 
-  useGetOrderDetailsQuery(orderId);
+
+  const {
+    data: order,
+    refetch,
+    isLoading,
+    error,
+  } = useGetOrderDetailsQuery(orderId);
 
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
 
-  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const [deliverOrder, { isLoading: loadingDeliver }] =
     useDeliverOrderMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
+
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
   const {
     data: paypal,
@@ -59,17 +65,12 @@ const OrderScreen = () => {
         refetch();
         toast.success('Order is paid');
       } catch (err) {
-        toast.error(err?.data?.message || err.message);
+        toast.error(err?.data?.message || err.error);
       }
     });
   }
 
-  async function onApproveTest() {
-    await payOrder({ orderId, details: { payer: {} } });
-     refetch();
 
-     toast.success('Order is paid');
-   }
 
   function onError(err) {
     toast.error(err.message);
@@ -84,28 +85,25 @@ const OrderScreen = () => {
           },
         ],
       })
-      .then((orderId) => {
-        return orderId;
+      .then((orderID) => {
+        return orderID;
       });
   }
 
-
   const deliverHandler = async () => {
-    try{
-      await deliverOrder(orderId);
+    await deliverOrder(orderId);
     refetch();
-    toast.success('Order Delivered');
-  } catch(err) {
-    toast.error(err?.data?.message || err.message );
-  }
-  }
+  };
 
-return isLoading ? <Loader /> : error ? <Message variant="danger" />
-:(
-  <>
-  <h1>Order{order._id}</h1>
-  <Row>
-  <Col md={8}>
+  return isLoading ? (
+    <Loader />
+  ) : error ? (
+    <Message variant='danger'>{error.data.message}</Message>
+  ) : (
+    <>
+      <h1>Order {order._id}</h1>
+      <Row>
+        <Col md={8}>
           <ListGroup variant='flush'>
             <ListGroup.Item>
               <h2>Shipping</h2>
@@ -146,11 +144,20 @@ return isLoading ? <Loader /> : error ? <Message variant="danger" />
 
             <ListGroup.Item>
               <h2>Order Items</h2>
+              {order.orderItems.length === 0 ? (
+                <Message>Order is empty</Message>
+              ) : (
+                <ListGroup variant='flush'>
                   {order.orderItems.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <Row>
                         <Col md={1}>
-                          <Image src={item.image} alt={item.name} fluid rounded/>
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            fluid
+                            rounded
+                          />
                         </Col>
                         <Col>
                           <Link to={`/product/${item.product}`}>
@@ -163,11 +170,13 @@ return isLoading ? <Loader /> : error ? <Message variant="danger" />
                       </Row>
                     </ListGroup.Item>
                   ))}
-                </ListGroup.Item>
-               </ListGroup> 
-               </Col>
-               <Col md={4}>Column 
-               <Card>
+                </ListGroup>
+              )}
+            </ListGroup.Item>
+          </ListGroup>
+        </Col>
+        <Col md={4}>
+          <Card>
             <ListGroup variant='flush'>
               <ListGroup.Item>
                 <h2>Order Summary</h2>
@@ -204,13 +213,7 @@ return isLoading ? <Loader /> : error ? <Message variant="danger" />
                     <Loader />
                   ) : (
                     <div>
-
-                      <Button
-                        style={{ marginBottom: '10px' }}
-                        onClick={onApproveTest}
-                      >
-                        Test Pay Order
-                      </Button> 
+                 
 
                       <div>
                         <PayPalButtons
@@ -224,7 +227,7 @@ return isLoading ? <Loader /> : error ? <Message variant="danger" />
                 </ListGroup.Item>
               )}
 
-             {loadingDeliver && <Loader />}
+              {loadingDeliver && <Loader />}
 
               {userInfo &&
                 userInfo.isAdmin &&
@@ -237,8 +240,8 @@ return isLoading ? <Loader /> : error ? <Message variant="danger" />
                       onClick={deliverHandler}
                     >
                       Mark As Delivered
-                    </Button> 
-                 </ListGroup.Item> 
+                    </Button>
+                  </ListGroup.Item>
                 )}
             </ListGroup>
           </Card>
